@@ -1,0 +1,31 @@
+package org.firstinspires.ftc.teamcode.Auto;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Autonomous()
+public class SimpleOpenCV extends LinearOpMode {
+    private DrawRectangleProcessor drawRectangleProcessor;
+    private VisionPortal visionPortal;
+    @Override
+    public void runOpMode() {
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        drawRectangleProcessor = new DrawRectangleProcessor();
+        visionPortal = VisionPortal.easyCreateWithDefaults(webcamName, drawRectangleProcessor);
+        waitForStart();
+        visionPortal.stopStreaming();
+        while (opModeIsActive()) {
+            sleep(20);
+        }
+    }
+
+
+}
