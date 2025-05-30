@@ -24,7 +24,7 @@ public class VisionPipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
         Scalar lowHSV = new Scalar(15, 100, 100);
-        Scalar highHSV = new Scalar(40, 255, 255);
+        Scalar highHSV = new Scalar(42, 255, 255);
         Core.inRange(mat, lowHSV, highHSV, mat);
 
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
@@ -34,7 +34,10 @@ public class VisionPipeline extends OpenCvPipeline {
         Mat hierarchy = new Mat();
         Imgproc.findContours(mat, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
         int i = 0;
+        double totalArea = input.width() * input.height();
         for (MatOfPoint contour : contours) {
+            double contourArea = Imgproc.contourArea(contour);
+            if (contourArea / totalArea < 0.005) continue;
             Imgproc.drawContours(input, contours, i, new Scalar(255, 0, 0), 2);
             Moments moments = Imgproc.moments(contour);
             double cX = moments.get_m10() / moments.get_m00();
